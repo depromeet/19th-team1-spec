@@ -1,0 +1,13 @@
+# 파일마다 담당 파트. 담당 파트 중 한 명의 승인이 있어야 머지된다.
+# TODO: <design> <server> <web> 를 팀원 GitHub 아이디로 바꾼다 (예: @alice @bob)
+
+/prd/features/collect.md   <server> <web>
+/prd/features/organize.md  <server>
+/prd/features/home.md      <design>
+/prd/features/retrieve.md  <design> <server>
+/prd/features/nudge.md     <design>
+/prd/features/trust.md     <server> <design>
+
+/design/  <design>
+/fe/      <web>
+/be/      <server>

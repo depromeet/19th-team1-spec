@@ -1,0 +1,26 @@
+name: notify-discord
+
+# prd/ 변경 PR이 열리거나 머지되면 디스코드로 알린다.
+# 저장소 Settings → Secrets 에 DISCORD_WEBHOOK_URL 을 등록해야 동작한다.
+on:
+  pull_request:
+    types: [opened, closed]
+    paths: ['prd/**']
+
+jobs:
+  notify:
+    if: github.event.action == 'opened' || github.event.pull_request.merged == true
+    runs-on: ubuntu-latest
+    steps:
+      - name: Send
+        env:
+          WEBHOOK: ${{ secrets.DISCORD_WEBHOOK_URL }}
+          ACTION: ${{ github.event.action }}
+          TITLE: ${{ github.event.pull_request.title }}
+          URL: ${{ github.event.pull_request.html_url }}
+          AUTHOR: ${{ github.event.pull_request.user.login }}
+        run: |
+          [ -z "$WEBHOOK" ] && { echo "DISCORD_WEBHOOK_URL 없음, 건너뜀"; exit 0; }
+          if [ "$ACTION" = "opened" ]; then HEAD="📝 PRD 변경 리뷰 요청"; else HEAD="✅ PRD 반영됨"; fi
+          jq -n --arg c "$HEAD — $TITLE ($AUTHOR)"$'\n'"$URL" '{content: $c}' \
+            | curl -sf -H 'Content-Type: application/json' -d @- "$WEBHOOK"
