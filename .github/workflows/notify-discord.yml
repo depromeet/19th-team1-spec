@@ -1,11 +1,11 @@
 name: notify-discord
 
-# prd/ 변경 PR이 열리거나 머지되면 디스코드로 알린다.
+# PRD.md 변경 PR이 열리거나 머지되면 디스코드로 알린다.
 # 저장소 Settings → Secrets 에 DISCORD_WEBHOOK_URL 을 등록해야 동작한다.
 on:
   pull_request:
     types: [opened, closed]
-    paths: ['prd/**']
+    paths: ['PRD.md']
 
 jobs:
   notify:
